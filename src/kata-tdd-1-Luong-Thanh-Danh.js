@@ -9,7 +9,7 @@ StringCalculator.stringCalculator = {
 		if(0 === numbers.length)
 			return result;
 			
-		var inputs = numbers.split(',');
+		var inputs = numbers.split(/[\n,]+/);
 		
 		for (var i = 0; i < inputs.length; i++) {
 			result += parseInt(inputs[i]);
