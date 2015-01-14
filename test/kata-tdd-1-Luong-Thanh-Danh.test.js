@@ -13,4 +13,8 @@ describe("String Calculator",function(){
 	it("should return 3 for '1,2' string", function(){
 		expect(testCalculator.add("1,2")).toEqual(3);
 	})
+	
+	it("should return 6 for '1,2,3' string", function(){
+		expect(testCalculator.add("1,2,3")).toEqual(6);
+	})
 });
