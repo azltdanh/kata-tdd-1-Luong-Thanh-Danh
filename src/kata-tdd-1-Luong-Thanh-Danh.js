@@ -15,7 +15,17 @@ StringCalculator.stringCalculator = {
 		if (numbers.indexOf('//') == 0) {
 			var customDelimiter = numbers.substring(numbers.indexOf('//') + 2, numbers.indexOf('\n'));
 			numbers = numbers.substring(numbers.indexOf('\n') + 1);
-			defaultDelimiters.push(customDelimiter);
+
+			// check if custom delimiter in format "//[delimiter]\n" 
+			var delimiters = customDelimiter.match(/[*]+/);
+
+			if (delimiters != null) {
+				for (i = 0; i < delimiters.length; i++) {
+					defaultDelimiters.push(delimiters[i]);
+				}
+			} else {
+				defaultDelimiters.push(customDelimiter);
+			}
 		}
 
 		// catch negative numbers exception
@@ -30,7 +40,10 @@ StringCalculator.stringCalculator = {
 
 		// sum of numbers
 		for (var i = 0; i < inputs.length; i++) {
-			result += parseInt(inputs[i]);
+			var numberToAdd = parseInt(inputs[i]);
+			if (numberToAdd <= 1000) {
+				result += parseInt(inputs[i]);
+			}
 		}
 
 		return result;
