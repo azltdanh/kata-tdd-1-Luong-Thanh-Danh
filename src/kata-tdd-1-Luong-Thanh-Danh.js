@@ -20,7 +20,6 @@ StringCalculator.stringCalculator = {
 			var delimiters = customDelimiter.match(/\[(.*?)\]/g);
 
 			if (delimiters != null) {
-				console.log(delimiters)
 				for (i = 0; i < delimiters.length; i++) {
 					var delimiter = delimiters[i];
 					// remove square brackets
