@@ -59,8 +59,17 @@ describe("String Calculator", function () {
 	})
 
 	// Support different delimiters. Delimiters can be of any length with the following format: "//[delimiter]\n"
-	it("should return 6 for '//[***]\\n1***2***3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\n'", function () {
+	it("should return 6 for '//[***]\\n1***2***3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\\n'", function () {
 		expect(testCalculator.add("//[***]\n1***2***3")).toEqual(6);
+	})
+	
+	it("should return 6 for '//[aaa]\\n1aaa2aaa3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\\n'", function () {
+		expect(testCalculator.add("//[aaa]\n1aaa2aaa3")).toEqual(6);
+	})
+
+	// Support different delimiters. Allow multiple delimiters like this: "//[delim1][delim2]\n"
+	it("should return 6 for '//[*][%]\\n1*2%3' string. Support different delimiters. Allow multiple delimiters like this: '//[delim1][delim2]\\n'", function () {
+		expect(testCalculator.add("//[*][%]\n1*2%3")).toEqual(6);
 	})
 
 });
