@@ -23,8 +23,8 @@ StringCalculator.stringCalculator = {
 				for (i = 0; i < delimiters.length; i++) {
 					var delimiter = delimiters[i];
 					// remove square brackets
-					//defaultDelimiters.push(delimiter.substring(1,delimiter.length-1));
-					defaultDelimiters.push(delimiter.replace(/\[|\]/gi, ''));
+					defaultDelimiters.push(delimiter.substring(1,delimiter.length-1));
+					//defaultDelimiters.push(delimiter.replace(/\[|\]/gi, ''));
 				}
 			} else {
 				defaultDelimiters.push(customDelimiter);
