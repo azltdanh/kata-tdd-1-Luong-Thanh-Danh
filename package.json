@@ -14,7 +14,7 @@
     "grunt-contrib-uglify": "^0.7.0"
   },
   "scripts": {
-    "test": "karma start"
+    "test": "karma start karma.conf.js"
   },
   "repository": {
     "type": "git",
