@@ -32,10 +32,16 @@ $ npm install karma-jasmine karma-chrome-launcher --save-dev
 $ npm install -g karma-cli
 ```
 
+#### Configure Karma for the project:
+
+```
+$ karma init karma.conf.js
+```
+
 #### Run Karma:
 
 ```
-$ karma start
+$ karma start karma.conf.js
 ```
 
 ### Install JSHint, a tool that helps to detect errors and potential problems in your JavaScript code. 
@@ -145,5 +151,26 @@ StringCalculator.stringCalculator = {
 		return result;
 	}
 };
-
 ```
+
+> 2. Allow the Add method to handle an unknown amount of numbers
+
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+	// 4. Allow the Add method to handle an unknown amount of numbers
+	it("should return 6 for '1,2,3' string. Allow the Add method to handle an unknown amount of numbers", function () {
+		expect(testCalculator.add("1,2,3")).toEqual(6);
+	})
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+		// sum of numbers
+		for (var i = 0; i < inputs.length; i++) {
+			result += parseInt(inputs[i]);
+		}
+```
+
+The code above already solve the problem, so don't need to do anything about this step.
