@@ -240,8 +240,10 @@ Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
 
 > 5.Calling Add with a negative number will throw an exception “negatives not allowed” - and the negative that was passed.if there are multiple negatives, show all of them in the exception message 
 
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
 ```JavaScript
-	// Calling Add with a negative number will throw an exception �negatives not allowed� - and the negative that was passed.
+	// Calling Add with a negative number will throw an exception "negatives not allowed" - and the negative that was passed.
 	// if there are multiple negatives, show all of them in the exception message
 	it("should throw an exception when numbers contain negative number", function () {
 		expect(function () {
@@ -264,4 +266,253 @@ Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
 		var regex = new RegExp('[' + defaultDelimiters + ']+', 'g');
 		var inputs = numbers.split(regex);
 
+```
+
+> 6.Numbers bigger than 1000 should be ignored, so adding 2 + 1001  = 2
+
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+	// Numbers bigger than 1000 should be ignored
+	it("should return 2 for '2,1001' string. Numbers bigger than 1000 should be ignored", function () {
+		expect(testCalculator.add("2,1001")).toEqual(2);
+	})
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+
+		// sum of numbers
+		for (var i = 0; i < inputs.length; i++) {
+			var numberToAdd = parseInt(inputs[i]);
+			if (numberToAdd <= 1000) {
+				result += parseInt(inputs[i]);
+			}
+		}
+
+```
+
+> 7.Delimiters can be of any length with the following format:  “//[delimiter]\n” for example: “//[***]\n1***2***3” should return 6
+
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+	// Support different delimiters. Delimiters can be of any length with the following format: "//[delimiter]\n"
+	it("should return 6 for '//[***]\\n1***2***3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\n'", function () {
+		expect(testCalculator.add("//[***]\n1***2***3")).toEqual(6);
+	})
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+		// get custom delimiter
+		if (numbers.indexOf('//') == 0) {
+			var customDelimiter = numbers.substring(numbers.indexOf('//') + 2, numbers.indexOf('\n'));
+			numbers = numbers.substring(numbers.indexOf('\n') + 1);
+
+			// check if custom delimiter in format "//[delimiter]\n" 
+			var delimiters = customDelimiter.match(/[*]+/);
+
+			if (delimiters != null) {
+				for (i = 0; i < delimiters.length; i++) {
+					defaultDelimiters.push(delimiters[i]);
+				}
+			} else {
+				defaultDelimiters.push(customDelimiter);
+			}
+		}
+
+```
+
+> 8.Allow multiple delimiters like this:  “//[delim1][delim2]\n” for example “//[*][%]\n1*2%3” should return 6.
+
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+	// Support different delimiters. Delimiters can be of any length with the following format: "//[delimiter]\n"
+	it("should return 6 for '//[***]\\n1***2***3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\\n'", function () {
+		expect(testCalculator.add("//[***]\n1***2***3")).toEqual(6);
+	})
+	
+	it("should return 6 for '//[aaa]\\n1aaa2aaa3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\\n'", function () {
+		expect(testCalculator.add("//[aaa]\n1aaa2aaa3")).toEqual(6);
+	})
+
+	// Support different delimiters. Allow multiple delimiters like this: "//[delim1][delim2]\n"
+	it("should return 6 for '//[*][%]\\n1*2%3' string. Support different delimiters. Allow multiple delimiters like this: '//[delim1][delim2]\\n'", function () {
+		expect(testCalculator.add("//[*][%]\n1*2%3")).toEqual(6);
+	})
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+		var customDelimiter = numbers.substring(numbers.indexOf('//') + 2, numbers.indexOf('\n'));
+		numbers = numbers.substring(numbers.indexOf('\n') + 1);
+
+		// check if custom delimiter in format "//[delimiter]\n"
+		var delimiters = customDelimiter.match(/\[(.*?)\]/g);
+
+		if (delimiters != null) {
+			for (i = 0; i < delimiters.length; i++) {
+				var delimiter = delimiters[i];
+				// remove square brackets
+				defaultDelimiters.push(delimiter.substring(1,delimiter.length-1));
+			}
+		} else {
+			defaultDelimiters.push(customDelimiter);
+		}
+
+```
+
+> 9.make sure you can also handle multiple delimiters with length longer than one char
+
+The code above already solve this problem. What we need to do is add some comments, re-format the .js files
+
+Final \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+describe("String Calculator", function () {
+
+	var testCalculator = StringCalculator.stringCalculator;
+	
+	// 1. The method can take 0, 1 or 2 numbers, and will return their sum
+	// (for an empty string it will return 0)
+	it("should return 0 for an empty string", function () {
+		expect(testCalculator.add("")).toEqual(0);
+	})
+	
+	// 2. The method can take 0, 1 or 2 numbers, and will return their sum
+	// (for an empty string it will return 0)
+	it("should return 1 for '1' string", function () {
+		expect(testCalculator.add("1")).toEqual(1);
+	})
+	
+	// 3. The method can take 0, 1 or 2 numbers, and will return their sum
+	// (for an empty string it will return 0)
+	it("should return 3 for '1,2' string", function () {
+		expect(testCalculator.add("1,2")).toEqual(3);
+	})
+	
+	// 4. Allow the Add method to handle an unknown amount of numbers
+	it("should return 6 for '1,2,3' string. Allow the Add method to handle an unknown amount of numbers", function () {
+		expect(testCalculator.add("1,2,3")).toEqual(6);
+	})
+	
+	// 5. Allow the Add method to handle new lines between numbers (instead of commas).
+	it("should return 6 for '1\\n2,3' string. Allow the Add method to handle new lines between numbers", function () {
+		expect(testCalculator.add("1\n2,3")).toEqual(6);
+	})
+	
+	// 6. Support different delimiters "//[delimiter]\n[numbers...]"
+	it("should return 3 for '//;\\n1;2' string. Support different delimiters", function () {
+		expect(testCalculator.add("//;\n1;2")).toEqual(3);
+	})
+	
+	// 7. Support different delimiters "//[delimiter]\n[numbers...]"
+	it("should return 6 for '//;\\n1;2,3' string. Support different delimiters", function () {
+		expect(testCalculator.add("//;\n1;2,3")).toEqual(6);
+	})
+	
+	// 8. Support different delimiters "//[delimiter]\n[numbers...]"
+	it("should return 10 for '//;\\n1;2,3\n4' string. Support different delimiters", function () {
+		expect(testCalculator.add("//;\n1;2,3\n4")).toEqual(10);
+	})
+	
+	// 9. Calling Add with a negative number will throw an exception "negatives not allowed" - and the negative that was passed.
+	// if there are multiple negatives, show all of them in the exception message
+	it("should throw an exception when numbers contain negative number", function () {
+		expect(function () {
+			testCalculator.add("1,-2,-3")
+		}).toThrowError("negatives not allowed: -2,-3");
+	});
+	
+	// 10. Numbers bigger than 1000 should be ignored
+	it("should return 2 for '2,1001' string. Numbers bigger than 1000 should be ignored", function () {
+		expect(testCalculator.add("2,1001")).toEqual(2);
+	})
+	
+	// 11. Support different delimiters. Delimiters can be of any length with the following format: "//[delimiter]\n"
+	it("should return 6 for '//[***]\\n1***2***3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\\n'", function () {
+		expect(testCalculator.add("//[***]\n1***2***3")).toEqual(6);
+	})
+	
+	// 12. Support different delimiters. Delimiters can be of any length with the following format: "//[delimiter]\n"
+	it("should return 6 for '//[aaa]\\n1aaa2aaa3' string. Support different delimiters. Delimiters can be of any length with the following format: '//[delimiter]\\n'", function () {
+		expect(testCalculator.add("//[aaa]\n1aaa2aaa3")).toEqual(6);
+	})
+	
+	// 13. Support different delimiters. Allow multiple delimiters like this: "//[delim1][delim2]\n"
+	it("should return 6 for '//[*][%]\\n1*2%3' string. Support different delimiters. Allow multiple delimiters like this: '//[delim1][delim2]\\n'", function () {
+		expect(testCalculator.add("//[*][%]\n1*2%3")).toEqual(6);
+	})
+	
+	// 14. Support different delimiters. Allow multiple delimiters with length longer than one char like this: "//[delim1][delim2]\n"
+	it("should return 6 for '//[**][aaa]\\n1**2aaa3' string. Support different delimiters. Allow multiple delimiters with length longer than one char like this: '//[delim1][delim2]\\n'", function () {
+		expect(testCalculator.add("//[**][aaa]\n1**2aaa3")).toEqual(6);
+	})
+
+});
+
+```
+
+Final \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+if (typeof StringCalculator == 'undefined') {
+	StringCalculator = {};
+}
+
+StringCalculator.stringCalculator = {
+	add : function (numbers) {
+		var result = 0;
+		var defaultDelimiters = ['\n', ','];
+
+		// return 0 for an empty string
+		if (0 === numbers.length)
+			return result;
+
+		// get custom delimiter
+		if (numbers.indexOf('//') == 0) {
+			var customDelimiter = numbers.substring(numbers.indexOf('//') + 2, numbers.indexOf('\n'));
+			numbers = numbers.substring(numbers.indexOf('\n') + 1);
+
+			// check if custom delimiter in format "//[delimiter]\n"
+			var delimiters = customDelimiter.match(/\[(.*?)\]/g);
+
+			if (delimiters != null) {
+				for (i = 0; i < delimiters.length; i++) {
+					var delimiter = delimiters[i];
+					// remove square brackets
+					defaultDelimiters.push(delimiter.substring(1,delimiter.length-1));
+					//defaultDelimiters.push(delimiter.replace(/\[|\]/gi, ''));
+				}
+			} else {
+				defaultDelimiters.push(customDelimiter);
+			}
+		}
+
+		// catch negative numbers exception
+		var negativeNumbers = numbers.match(/-\d+/g);
+		if (negativeNumbers != null && negativeNumbers.length > 0) {
+			throw new Error("negatives not allowed: " + negativeNumbers);
+		}
+
+		// split to array of number
+		var regex = new RegExp('[' + defaultDelimiters + ']+', 'g');
+		var inputs = numbers.split(regex);
+
+		// sum of numbers
+		for (var i = 0; i < inputs.length; i++) {
+			var numberToAdd = parseInt(inputs[i]);
+			if (numberToAdd <= 1000) {
+				result += parseInt(inputs[i]);
+			}
+		}
+
+		return result;
+	}
+};
 ```
