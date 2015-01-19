@@ -16,63 +16,134 @@ The recommended approach is to install Karma (and all the plugins your project n
 
 #### Install Karma:
 
-'''
+```
 $ npm install karma --save-dev
-'''
+```
 
 #### Install plugins that your project needs:
 
-'''
+```
 $ npm install karma-jasmine karma-chrome-launcher --save-dev
-'''
+```
 
 #### Install karma-cli globally.
 
-'''
+```
 $ npm install -g karma-cli
-'''
+```
 
 #### Run Karma:
 
-'''
+```
 $ karma start
-'''
+```
 
 ### Install JSHint, a tool that helps to detect errors and potential problems in your JavaScript code. 
 
 http://jshint.com/
 
-'''
+```
 $ npm install jshint
-'''
+```
 
 ### Install Grunt, The Javascript Task Runner 
 
 http://gruntjs.com
 
-'''
+```
 $ npm install -g grunt-cli
-'''
+```
 
 #### Install the latest version of Grunt in your project folder, adding it to your devDependencies
 
-'''
+```
 $ npm install grunt --save-dev
-'''
+```
 
 #### Install the JSHint task module
 
-'''
+```
 $ npm install grunt-contrib-jshint --save-dev
-'''
+```
 
 #### Install the uglify task module
 
-'''
+```
 $ npm install grunt-contrib-uglify --save-dev
-'''
+```
 
-Start TDD with test\kata-tdd-1-Luong-Thanh-Danh.test.js
-- The method can take 0, 1 or 2 numbers, and will return their sum (for an empty string it will return 0) for example “” or “1” or “1,2”
+## String Calculator
 
-Start implement with src\kata-tdd-1-Luong-Thanh-Danh.js
+The following is a TDD Kata- an exercise in coding, refactoring and test-first, that you should apply daily for at least 15 minutes (I do 30).
+
+##Before you start: 
+
+- Try not to read ahead.
+- Do one task at a time. The trick is to learn to work incrementally.
+- Make sure you only test for correct inputs. there is no need to test for invalid inputs for this kata
+
+
+> 1. Create a simple String calculator with a method int Add(string numbers)
+
+>    1. The method can take 0, 1 or 2 numbers, and will return their sum (for an empty string it will return 0) for example â€œâ€ or â€œ1â€ or â€œ1,2â€
+>    2. Start with the simplest test case of an empty string and move to 1 and two numbers
+>    3. Remember to solve things as simply as possible so that you force yourself to write tests you did not think about
+>    4. Remember to refactor after each passing test
+
+Start TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+describe("String Calculator", function () {
+
+	var testCalculator = StringCalculator.stringCalculator;
+
+	// 1. The method can take 0, 1 or 2 numbers, and will return their sum
+	// (for an empty string it will return 0)
+	it("should return 0 for an empty string", function () {
+		expect(testCalculator.add("")).toEqual(0);
+	})
+
+	// 2. The method can take 0, 1 or 2 numbers, and will return their sum
+	// (for an empty string it will return 0)
+	it("should return 1 for '1' string", function () {
+		expect(testCalculator.add("1")).toEqual(1);
+	})
+
+	// 3. The method can take 0, 1 or 2 numbers, and will return their sum
+	// (for an empty string it will return 0)
+	it("should return 3 for '1,2' string", function () {
+		expect(testCalculator.add("1,2")).toEqual(3);
+	})
+	
+});
+```
+
+Start implement with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+if (typeof StringCalculator == 'undefined') {
+	StringCalculator = {};
+}
+
+StringCalculator.stringCalculator = {
+	add : function (numbers) {
+		var result = 0;
+		
+		// return 0 for an empty string
+		if (0 === numbers.length)
+			return result;
+
+		// split to array of number
+		var regex = new RegExp('[,]+', 'g');
+		var inputs = numbers.split(regex);
+
+		// sum of numbers
+		for (var i = 0; i < inputs.length; i++) {
+			result += parseInt(inputs[i]);
+		}
+
+		return result;
+	}
+};
+
+```
