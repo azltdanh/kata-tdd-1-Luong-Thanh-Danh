@@ -89,77 +89,65 @@ The following is a TDD Kata- an exercise in coding, refactoring and test-first, 
 - Make sure you only test for correct inputs. there is no need to test for invalid inputs for this kata
 
 
-> 1. Create a simple String calculator with a method int Add(string numbers)
+> 1.Create a simple String calculator with a method int Add(string numbers)
 
->    1. The method can take 0, 1 or 2 numbers, and will return their sum (for an empty string it will return 0) for example “” or “1” or “1,2”
->    2. Start with the simplest test case of an empty string and move to 1 and two numbers
->    3. Remember to solve things as simply as possible so that you force yourself to write tests you did not think about
->    4. Remember to refactor after each passing test
+>    	a.The method can take 0, 1 or 2 numbers, and will return their sum (for an empty string it will return 0) for example “” or “1” or “1,2”
+>    	b.Start with the simplest test case of an empty string and move to 1 and two numbers
+>    	c.Remember to solve things as simply as possible so that you force yourself to write tests you did not think about
+>    	d.Remember to refactor after each passing test
 
 Start TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
 
 ```JavaScript
-describe("String Calculator", function () {
-
+describe("String Calculator",function(){
+	
 	var testCalculator = StringCalculator.stringCalculator;
-
-	// 1. The method can take 0, 1 or 2 numbers, and will return their sum
-	// (for an empty string it will return 0)
-	it("should return 0 for an empty string", function () {
+	
+	it("should return 0 for an empty string", function(){
 		expect(testCalculator.add("")).toEqual(0);
 	})
-
-	// 2. The method can take 0, 1 or 2 numbers, and will return their sum
-	// (for an empty string it will return 0)
-	it("should return 1 for '1' string", function () {
+	
+	it("should return 1 for '1' string", function(){
 		expect(testCalculator.add("1")).toEqual(1);
 	})
-
-	// 3. The method can take 0, 1 or 2 numbers, and will return their sum
-	// (for an empty string it will return 0)
-	it("should return 3 for '1,2' string", function () {
+	
+	it("should return 3 for '1,2' string", function(){
 		expect(testCalculator.add("1,2")).toEqual(3);
 	})
-	
 });
 ```
 
 Start implement with \src\kata-tdd-1-Luong-Thanh-Danh.js
 
 ```JavaScript
-if (typeof StringCalculator == 'undefined') {
+if(typeof StringCalculator == 'undefined') {
 	StringCalculator = {};
 }
 
 StringCalculator.stringCalculator = {
-	add : function (numbers) {
+	add: function(numbers){
 		var result = 0;
 		
-		// return 0 for an empty string
-		if (0 === numbers.length)
+		if(0 === numbers.length)
 			return result;
-
-		// split to array of number
-		var regex = new RegExp('[,]+', 'g');
-		var inputs = numbers.split(regex);
-
-		// sum of numbers
+			
+		var inputs = numbers.split(',');
+		
 		for (var i = 0; i < inputs.length; i++) {
 			result += parseInt(inputs[i]);
 		}
-
+		
 		return result;
 	}
 };
 ```
 
-> 2. Allow the Add method to handle an unknown amount of numbers
+> 2.Allow the Add method to handle an unknown amount of numbers
 
 Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
 
 ```JavaScript
-	// 4. Allow the Add method to handle an unknown amount of numbers
-	it("should return 6 for '1,2,3' string. Allow the Add method to handle an unknown amount of numbers", function () {
+	it("should return 6 for '1,2,3' string", function(){
 		expect(testCalculator.add("1,2,3")).toEqual(6);
 	})
 ```
@@ -167,10 +155,29 @@ Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
 Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
 
 ```JavaScript
-		// sum of numbers
 		for (var i = 0; i < inputs.length; i++) {
 			result += parseInt(inputs[i]);
 		}
 ```
 
 The code above already solve the problem, so don't need to do anything about this step.
+
+> 3.Allow the Add method to handle new lines between numbers (instead of commas).  
+> 	| a.the following input is ok:  “1\n2,3”  (will equal 6)  
+> 	| b.the following input is NOT ok:  “1,\n” (not need to prove it - just clarifying)
+
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+	it("should return 6 for '1\\n2,3' string", function(){
+		expect(testCalculator.add("1\n2,3")).toEqual(6);
+	})
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+		var inputs = numbers.split(/[\n,]+/);
+```
+
+What we do is change ```numbers.split(',')``` to ```numbers.split(/[\n,]+/)```
