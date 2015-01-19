@@ -163,8 +163,9 @@ Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
 The code above already solve the problem, so don't need to do anything about this step.
 
 > 3.Allow the Add method to handle new lines between numbers (instead of commas).  
-> 	| a.the following input is ok:  “1\n2,3”  (will equal 6)  
-> 	| b.the following input is NOT ok:  “1,\n” (not need to prove it - just clarifying)
+
+>     	a.the following input is ok:  “1\n2,3”  (will equal 6)  
+>     	b.the following input is NOT ok:  “1,\n” (not need to prove it - just clarifying)
 
 Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
 
@@ -181,3 +182,86 @@ Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
 ```
 
 What we do is change ```numbers.split(',')``` to ```numbers.split(/[\n,]+/)```
+
+> 4.Support different delimiters  
+
+>     	a.to change a delimiter, the beginning of the string will contain a separate line that looks like this:         “//[delimiter]\n[numbers…]” for example “//;\n1;2” should return three where the default delimiter is ‘;’ .  
+>     	b.the first line is optional. all existing scenarios should still be supported
+
+Continue TDD with \test\kata-tdd-1-Luong-Thanh-Danh.test.js
+
+```JavaScript
+	// Support different delimiters 
+	it("should return 3 for '//;\\n1;2' string", function(){
+		expect(testCalculator.add("//;\n1;2")).toEqual(3);
+	})
+	
+	// Support different delimiters 
+	it("should return 6 for '//;\\n1;2,3' string", function(){
+		expect(testCalculator.add("//;\n1;2,3")).toEqual(6);
+	})
+	
+	// Support different delimiters 
+	it("should return 10 for '//;\\n1;2,3\n4' string", function(){
+		expect(testCalculator.add("//;\n1;2,3\n4")).toEqual(10);
+	})
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+	add: function(numbers){
+		var result = 0;
+		var defaultDelimiters = ['\n',','];
+		
+		// return 0 for an empty string
+		if(0 === numbers.length)
+			return result;
+		
+		// get custom delimiter
+		if(numbers.indexOf('//') == 0){
+			var customDelimiter = numbers.substring(numbers.indexOf('//') + 2,numbers.indexOf('\n'));
+			numbers = numbers.substring(numbers.indexOf('\n') + 1);
+			defaultDelimiters.push(customDelimiter);
+		}
+		
+		// split to array of number
+		var regex = new RegExp( '[' + defaultDelimiters + ']+' , 'g');
+		var inputs = numbers.split(regex);
+		
+		// sum of numbers
+		for (var i = 0; i < inputs.length; i++) {
+			result += parseInt(inputs[i]);
+		}
+		
+		return result;
+	}
+```
+
+> 5.Calling Add with a negative number will throw an exception “negatives not allowed” - and the negative that was passed.if there are multiple negatives, show all of them in the exception message 
+
+```JavaScript
+	// Calling Add with a negative number will throw an exception �negatives not allowed� - and the negative that was passed.
+	// if there are multiple negatives, show all of them in the exception message
+	it("should throw an exception when numbers contain negative number", function () {
+		expect(function () {
+			testCalculator.add("1,-2,-3")
+		}).toThrowError("negatives not allowed: -2,-3");
+	});
+```
+
+Refactory with \src\kata-tdd-1-Luong-Thanh-Danh.js
+
+```JavaScript
+
+		// catch negative numbers exception
+		var negativeNumbers = numbers.match(/-\d+/g);
+		if (negativeNumbers != null && negativeNumbers.length > 0) {
+			throw new Error("negatives not allowed: " + negativeNumbers);
+		}
+		
+		// split to array of number
+		var regex = new RegExp('[' + defaultDelimiters + ']+', 'g');
+		var inputs = numbers.split(regex);
+
+```
